@@ -18,6 +18,14 @@ import { debounce } from '@/libs/helpers'
 import { GET_POKEMON_LIST } from '@/libs/queries'
 import { Pokemon } from '@/libs/types'
 
+const EmptyListMessage = () => {
+  return (
+    <View style={{ alignItems: 'center', marginTop: 20 }}>
+      <MonoText>No Pokémon found.</MonoText>
+    </View>
+  )
+}
+
 export default function App() {
   const colors = useThemeColor()
   const [search, setSearch] = useState('')
@@ -58,7 +66,7 @@ export default function App() {
           })
         }
       }, 300),
-    [data, debouncedSearch, loading]
+    [data?.pokemon_v2_pokemon.length, debouncedSearch, loading, fetchMore]
   )
 
   const filteredData = useMemo(() => {
@@ -88,18 +96,13 @@ export default function App() {
     )
   }
 
-  const EmptyListMessage = () => (
-    <View style={{ alignItems: 'center', marginTop: 20 }}>
-      <MonoText>No Pokémon found.</MonoText>
-    </View>
-  )
-
   return (
     <RootView>
       <View style={styles.header}>
         <Image
           source={require('../assets/images/pokedex.png')}
           style={styles.logo}
+          resizeMode="contain"
         />
         <SearchBar search={search} onChange={handleSearch} />
       </View>
@@ -144,7 +147,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 140,
     height: 50,
-    objectFit: 'cover',
   },
   container: {
     flex: 1,

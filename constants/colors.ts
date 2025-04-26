@@ -39,6 +39,7 @@ export const Colors = {
     border: '#DADADA',
 
     text: '#212121',
+    textContrast: '#FFFFFF',
     mutedText: '#666666',
 
     grayLight: '#E0E0E0',
@@ -61,6 +62,7 @@ export const Colors = {
     border: '#333333',
 
     text: '#FFFFFF',
+    textContrast: '#212121',
     mutedText: '#AAAAAA',
 
     status: {

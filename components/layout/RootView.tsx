@@ -5,12 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useThemeColor } from '@/hooks/useThemeColor'
 
+interface RootViewProps extends ViewProps {
+  color?: string
+}
+
 const RootView = ({
   children,
   style,
   color,
   ...rest
-}: PropsWithChildren<ViewProps & { color?: string }>) => {
+}: PropsWithChildren<RootViewProps>) => {
   const colors = useThemeColor()
   const bgColor = color ?? colors.tint
 

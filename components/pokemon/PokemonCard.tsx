@@ -13,7 +13,9 @@ import Card from '../shared/Card'
 import MonoText from '../shared/MonoText'
 import PokemonTypeBadge from './PokemonTypeBadge'
 
-type Props = { pokemon: Pokemon }
+interface Props {
+  pokemon: Pokemon
+}
 
 const PokemonCard = ({ pokemon }: Props) => {
   const pokemonId = getPokemonNumber(pokemon.id)

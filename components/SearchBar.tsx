@@ -1,7 +1,8 @@
 import { Colors } from '@/constants/colors'
+import { useCallback } from 'react'
 import { Image, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
-type Props = {
+interface Props {
   search: string
   onChange: (s: string) => void
 }
@@ -9,17 +10,17 @@ type Props = {
 const SearchBar = ({ search, onChange }: Props) => {
   const hasSearch = search !== ''
 
-  const emptySearch = () => {
+  const emptySearch = useCallback(() => {
     onChange('')
-  }
+  }, [onChange])
 
   return (
     <View style={styles.wrapper}>
       <Image
         source={require('../assets/images/search.png')}
-        width={16}
-        height={16}
         style={styles.icon}
+        accessible={true}
+        accessibilityLabel="Search"
       />
       <TextInput
         style={styles.input}
@@ -27,13 +28,18 @@ const SearchBar = ({ search, onChange }: Props) => {
         value={search}
         placeholder="Search"
         placeholderTextColor={Colors.light.mutedText}
+        accessible={true}
+        accessibilityLabel="Search input"
       />
       {hasSearch && (
-        <Pressable onPress={emptySearch} style={styles.clearButton}>
+        <Pressable
+          onPress={emptySearch}
+          style={styles.clearButton}
+          accessible={true}
+          accessibilityLabel="Clear search"
+        >
           <Image
             source={require('../assets/images/close.png')}
-            width={16}
-            height={16}
             style={styles.icon}
           />
         </Pressable>

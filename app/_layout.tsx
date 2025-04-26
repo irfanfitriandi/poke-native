@@ -9,7 +9,7 @@ import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { useColorScheme } from 'react-native'
+import { ActivityIndicator, useColorScheme, View } from 'react-native'
 import 'react-native-reanimated'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -35,7 +35,11 @@ export default function RootLayout() {
   }, [loaded])
 
   if (!loaded) {
-    return null
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
   }
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -44,6 +48,7 @@ export default function RootLayout() {
           screenOptions={{
             contentStyle: { backgroundColor: 'transparent' },
             headerShown: false,
+            animation: 'fade',
           }}
         >
           <Stack.Screen name="index" />

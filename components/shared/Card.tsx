@@ -3,7 +3,7 @@ import { StyleSheet, View, type ViewProps } from 'react-native'
 import { Shadows } from '@/constants/shadows'
 import { useThemeColor } from '@/hooks/useThemeColor'
 
-type Props = ViewProps & {
+interface Props extends ViewProps {
   elevation?: number
 }
 

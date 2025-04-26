@@ -7,8 +7,8 @@ export const getPokemonArtwork = (id: string | number): string =>
 export const getPokemonNumber = (id: string | number): string =>
   `#${id.toString().padStart(4, '0')}`
 
-export const getPokemonTypes = (types: PokemonTypeWrapper[]) =>
-  types.map((t) => t.pokemon_v2_type.name)
+export const getPokemonTypes = (types: PokemonTypeWrapper[]): string[] =>
+  types?.map((t) => t.pokemon_v2_type?.name) ?? []
 
 export const formatWeight = (weight?: number): string =>
   weight !== undefined ? `${(weight / 10).toString().replace('.', ',')} kg` : ''
@@ -16,11 +16,8 @@ export const formatWeight = (weight?: number): string =>
 export const formatHeight = (height?: number): string =>
   height !== undefined ? `${(height / 10).toString().replace('.', ',')} m` : ''
 
-// Style
-import type { DimensionValue } from 'react-native'
-
-export const ratioToPercent = (value: number, max: number): DimensionValue =>
-  `${(value / max) * 100}%`
+export const formatFlavorText = (text?: string): string =>
+  text !== undefined ? text.replaceAll('\n', ' ').replaceAll('\f', ' ') : ''
 
 // Utils
 export const debounce = <T extends (...args: any[]) => void>(

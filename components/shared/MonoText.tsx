@@ -2,8 +2,7 @@ import React from 'react'
 import { Platform, StyleSheet, Text, TextProps, TextStyle } from 'react-native'
 
 type FontWeight = 'regular' | 'bold'
-type Variant = 'default' | 'caption'
-
+type Variant = 'default' | 'caption' 
 interface MonoTextProps extends TextProps {
   variant?: Variant
   weight?: FontWeight
@@ -43,12 +42,10 @@ const weightStyles: Record<FontWeight, TextStyle> = {
 const variantStyles: Record<Variant, TextStyle> = {
   default: {
     fontSize: 16,
-    lineHeight: 20,
     color: '#212121',
   },
   caption: {
     fontSize: 12,
-    lineHeight: 14,
     color: '#666666',
   },
 }

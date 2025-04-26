@@ -5,20 +5,14 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { PokemonTypes } from '@/libs/types'
 import MonoText from '../shared/MonoText'
 
-type Props = {
+interface Props {
   type: PokemonTypes
-}
-
-const isPokemonType = (type: string): type is PokemonTypes => {
-  return type in typeColors
 }
 
 const PokemonTypeBadge = ({ type }: Props) => {
   const colors = useThemeColor()
-  const lowerType = type.toLowerCase()
-  const backgroundColor = isPokemonType(lowerType)
-    ? colors.type[lowerType]
-    : '#ccc'
+  const colorKey = type.toLowerCase() as keyof typeof typeColors
+  const backgroundColor = colors.type[colorKey] ?? '#ccc'
 
   return (
     <View style={[styles.badgeContainer, { backgroundColor }]}>
