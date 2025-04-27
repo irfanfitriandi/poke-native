@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 2,
     width: '100%',
+    flex: 1,
   },
   input: {
     flex: 1,

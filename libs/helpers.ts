@@ -1,5 +1,5 @@
 // Pokemon
-import { PokemonTypeWrapper } from './types'
+import { PokemonTypes, PokemonTypeWrapper } from './types'
 
 export const getPokemonArtwork = (id: string | number): string =>
   `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
@@ -7,7 +7,7 @@ export const getPokemonArtwork = (id: string | number): string =>
 export const getPokemonNumber = (id: string | number): string =>
   `#${id.toString().padStart(4, '0')}`
 
-export const getPokemonTypes = (types: PokemonTypeWrapper[]): string[] =>
+export const getPokemonTypes = (types: PokemonTypeWrapper[]): PokemonTypes[] =>
   types?.map((t) => t.pokemon_v2_type?.name) ?? []
 
 export const formatWeight = (weight?: number): string =>

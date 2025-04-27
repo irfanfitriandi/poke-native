@@ -10,7 +10,6 @@ import React, {
   useState,
 } from 'react'
 import {
-  ActivityIndicator,
   Image,
   Pressable,
   StyleSheet,
@@ -24,6 +23,7 @@ import AppearFromBottom from '@/components/animation/AppearFromBottom'
 import FadingImage from '@/components/FadingImage'
 import RootView from '@/components/layout/RootView'
 import PokemonSpecs from '@/components/pokemon/PokemonSpecs'
+import PokeSpinner from '@/components/pokemon/PokemonSpinner'
 import PokemonStats from '@/components/pokemon/PokemonStats'
 import PokemonTypeBadge from '@/components/pokemon/PokemonTypeBadge'
 import Card from '@/components/shared/Card'
@@ -174,7 +174,7 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
   if (!pokemon) {
     return (
       <RootView style={styles.centeredContainer}>
-        <ActivityIndicator color={colors.tint} size="large" />
+        <PokeSpinner />
       </RootView>
     )
   }

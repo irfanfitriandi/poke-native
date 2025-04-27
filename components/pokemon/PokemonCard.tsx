@@ -1,4 +1,5 @@
 import { Link } from 'expo-router'
+import { useState } from 'react'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 
 import { Colors } from '@/constants/colors'
@@ -21,6 +22,7 @@ const PokemonCard = ({ pokemon }: Props) => {
   const pokemonId = getPokemonNumber(pokemon.id)
   const artworkUri = getPokemonArtwork(pokemon.id)
   const types = getPokemonTypes(pokemon.pokemon_v2_pokemontypes)
+  const [imageError, setImageError] = useState(false)
 
   return (
     <Link
@@ -32,11 +34,13 @@ const PokemonCard = ({ pokemon }: Props) => {
           <MonoText style={styles.pokemonId} variant="caption">
             {pokemonId}
           </MonoText>
-          <Image
-            source={{ uri: artworkUri }}
-            style={styles.image}
-            resizeMode="contain"
-          />
+              <Image
+                source={imageError ? require('@/assets/images/pokeball-color.png') : { uri: artworkUri }}
+                style={styles.image}
+                resizeMode="contain"
+                onError={() => setImageError(true)}
+                defaultSource={require('@/assets/images/pokeball-color.png')}
+              />
           <MonoText style={styles.pokemonName} weight="bold">
             {pokemon.name}
           </MonoText>

@@ -1,15 +1,18 @@
 import { useQuery } from '@apollo/client'
+import { MaterialIcons } from '@expo/vector-icons'
 import { useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native'
 
 import RootView from '@/components/layout/RootView'
 import PokemonCard from '@/components/pokemon/PokemonCard'
+import PokeSpinner from '@/components/pokemon/PokemonSpinner'
 import SearchBar from '@/components/SearchBar'
 import Card from '@/components/shared/Card'
 import MonoText from '@/components/shared/MonoText'
@@ -26,20 +29,33 @@ const EmptyListMessage = () => {
   )
 }
 
+type SortOption = 'id' | 'name' | 'none'
+
 export default function App() {
   const colors = useThemeColor()
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [sortBy, setSortBy] = useState<SortOption>('none')
 
   const debouncedSetSearch = useMemo(
-    () => debounce((text: string) => setDebouncedSearch(text), 300),
+    () => debounce((text: string) => setDebouncedSearch(text), 500),
     []
   )
 
   const { data, loading, error, fetchMore } = useQuery<{
     pokemon_v2_pokemon: Pokemon[]
   }>(GET_POKEMON_LIST, {
-    variables: { offset: 0, limit: 60 },
+    variables: {
+      offset: 0,
+      limit: 21,
+      search: debouncedSearch ? `%${debouncedSearch}%` : '%%',
+      orderBy:
+        sortBy === 'name'
+          ? { name: 'asc' }
+          : sortBy === 'id'
+          ? { id: 'asc' }
+          : undefined,
+    },
     notifyOnNetworkStatusChange: true,
   })
 
@@ -65,28 +81,11 @@ export default function App() {
             }),
           })
         }
-      }, 300),
+      }, 500),
     [data?.pokemon_v2_pokemon.length, debouncedSearch, loading, fetchMore]
   )
 
-  const filteredData = useMemo(() => {
-    if (!data?.pokemon_v2_pokemon) return []
-
-    if (!debouncedSearch) return data.pokemon_v2_pokemon
-
-    const searchLower = debouncedSearch.toLowerCase()
-    return data.pokemon_v2_pokemon.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(searchLower)
-    )
-  }, [data?.pokemon_v2_pokemon, debouncedSearch])
-
-  if (loading && !data) {
-    return (
-      <RootView>
-        <ActivityIndicator size="large" color={colors.tint} />
-      </RootView>
-    )
-  }
+  const filteredData = data?.pokemon_v2_pokemon || []
 
   if (error) {
     return (
@@ -104,32 +103,46 @@ export default function App() {
           style={styles.logo}
           resizeMode="contain"
         />
-        <SearchBar search={search} onChange={handleSearch} />
+        <View style={styles.searchContainer}>
+          <SearchBar search={search} onChange={handleSearch} />
+          <TouchableOpacity
+            style={styles.sortButton}
+            onPress={() =>
+              setSortBy((prev) => (prev === 'name' ? 'id' : 'name'))
+            }
+          >
+            <MaterialIcons name="sort" size={24} color={colors.textContrast} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Card style={styles.container}>
-        <FlatList
-          data={filteredData}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <PokemonCard pokemon={item} />}
-          numColumns={3}
-          contentContainerStyle={[
-            styles.list,
-            styles.gap,
-            { backgroundColor: colors.surface },
-          ]}
-          columnWrapperStyle={styles.gap}
-          onEndReached={debouncedSearch ? undefined : debouncedOnEnd}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            !debouncedSearch && loading ? (
-              <ActivityIndicator size="small" color={colors.tint} />
-            ) : null
-          }
-          ListEmptyComponent={
-            !loading && debouncedSearch ? <EmptyListMessage /> : null
-          }
-        />
+        {loading && !data?.pokemon_v2_pokemon ? (
+          <PokeSpinner />
+        ) : (
+          <FlatList
+            data={filteredData}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <PokemonCard pokemon={item} />}
+            numColumns={3}
+            contentContainerStyle={[
+              styles.list,
+              styles.gap,
+              { backgroundColor: colors.surface },
+            ]}
+            columnWrapperStyle={styles.gap}
+            onEndReached={debouncedSearch ? undefined : debouncedOnEnd}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              !debouncedSearch && loading ? (
+                <ActivityIndicator size="small" color={colors.tint} />
+              ) : null
+            }
+            ListEmptyComponent={
+              !loading && debouncedSearch ? <EmptyListMessage /> : null
+            }
+          />
+        )}
       </Card>
     </RootView>
   )
@@ -138,11 +151,18 @@ export default function App() {
 const styles = StyleSheet.create({
   header: {
     paddingVertical: 10,
-    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  sortButton: {
+    padding: 8,
   },
   logo: {
     width: 140,
