@@ -1,8 +1,7 @@
-import React from 'react'
 import { Platform, StyleSheet, Text, TextProps, TextStyle } from 'react-native'
 
 type FontWeight = 'regular' | 'bold'
-type Variant = 'default' | 'caption' 
+type Variant = 'default' | 'caption'
 interface MonoTextProps extends TextProps {
   variant?: Variant
   weight?: FontWeight

@@ -1,14 +1,9 @@
 import { useQuery } from '@apollo/client'
+import { MaterialIcons } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
 import { router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence } from 'moti'
-import React, {
-  memo,
-  PropsWithChildren,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import {
   Image,
   Pressable,
@@ -132,17 +127,17 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
     () => [
       {
         name: 'Weight',
-        image: require('@/assets/images/weight.png'),
+        icon: 'scale' as keyof typeof MaterialIcons.glyphMap,
         spec: formatWeight(pokemon?.weight),
       },
       {
         name: 'Height',
-        image: require('@/assets/images/ruler.png'),
+        icon: 'straighten' as keyof typeof MaterialIcons.glyphMap,
         spec: formatHeight(pokemon?.height),
       },
       {
         name: 'Ability',
-        image: require('@/assets/images/brain.png'),
+        icon: 'emoji-objects' as keyof typeof MaterialIcons.glyphMap,
         spec:
           pokemon?.pokemon_v2_pokemonabilities[0]?.pokemon_v2_ability.name ??
           'Unknown',
@@ -185,9 +180,11 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
       <View style={styles.headerWrapper}>
         <View style={styles.backWrapper}>
           <Pressable onPress={router.back}>
-            <Image
-              style={styles.backIcon}
-              source={require('@/assets/images/arrow.png')}
+            <MaterialIcons
+              name="play-arrow"
+              size={24}
+              color={colors.textContrast}
+              style={{ transform: [{ rotateY: '180deg' }] }}
             />
           </Pressable>
           <MonoText
@@ -213,9 +210,11 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
           <View style={styles.imageRow}>
             {id > firstPokemon ? (
               <Pressable onPress={onPrevious}>
-                <Image
-                  source={require('@/assets/images/chevron.png')}
-                  style={styles.chevron}
+                <MaterialIcons
+                  name="arrow-forward-ios"
+                  size={24}
+                  color={colors.textContrast}
+                  style={{ transform: [{ rotateY: '180deg' }] }}
                 />
               </Pressable>
             ) : (
@@ -238,9 +237,10 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
 
             {id < lastPokemon ? (
               <Pressable onPress={onNext}>
-                <Image
-                  source={require('@/assets/images/chevron.png')}
-                  style={[styles.chevron, styles.chevronFlipped]}
+                <MaterialIcons
+                  name="arrow-forward-ios"
+                  size={24}
+                  color={colors.textContrast}
                 />
               </Pressable>
             ) : (
@@ -269,7 +269,7 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
                     style={index > 0 ? styles.specSeparator : undefined}
                     index={index}
                   >
-                    <PokemonSpecs {...spec} />
+                    <PokemonSpecs {...spec} color={colorType} />
                   </AppearFromBottom>
                 ))}
               </AnimatePresence>
@@ -320,8 +320,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   backWrapper: { flexDirection: 'row', alignItems: 'center' },
-  backIcon: { width: 32, height: 32 },
-  pokemonName: { fontSize: 24, textTransform: 'capitalize' },
+  pokemonName: { fontSize: 24, textTransform: 'capitalize', paddingLeft: 4 },
   bodyWrapper: { justifyContent: 'flex-start' },
   pokeballBg: {
     position: 'absolute',
@@ -329,6 +328,7 @@ const styles = StyleSheet.create({
     right: 8,
     width: 208,
     height: 208,
+    opacity: 0.3,
   },
   cardBody: {
     marginTop: 140,
@@ -346,8 +346,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
-  chevron: { width: 24, height: 24 },
-  chevronFlipped: { transform: [{ rotateY: '180deg' }] },
   chevronPlaceholder: { width: 24 },
   imagePokemon: { alignSelf: 'center', justifyContent: 'center' },
   typesWrapper: { flexDirection: 'row', justifyContent: 'center', gap: 8 },

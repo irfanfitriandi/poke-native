@@ -1,12 +1,18 @@
 import { gql } from '@apollo/client'
 
 export const GET_POKEMON_LIST = gql`
-  query getPokemon($offset: Int, $limit: Int, $search: String, $orderBy: [pokemon_v2_pokemon_order_by!]) {
+  query getPokemon(
+    $offset: Int
+    $limit: Int
+    $search: String
+    $orderBy: [pokemon_v2_pokemon_order_by!]
+    $where: pokemon_v2_pokemon_bool_exp!
+  ) {
     pokemon_v2_pokemon(
-      limit: $limit, 
-      offset: $offset,
-      where: {name: {_ilike: $search}},
+      limit: $limit
+      offset: $offset
       order_by: $orderBy
+      where: { _and: [{ name: { _ilike: $search } }, $where] }
     ) {
       id
       name

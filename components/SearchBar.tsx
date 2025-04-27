@@ -1,6 +1,8 @@
-import { Colors } from '@/constants/colors'
+import { MaterialIcons } from '@expo/vector-icons'
 import { useCallback } from 'react'
-import { Image, Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+
+import { Colors } from '@/constants/colors'
 
 interface Props {
   search: string
@@ -16,12 +18,7 @@ const SearchBar = ({ search, onChange }: Props) => {
 
   return (
     <View style={styles.wrapper}>
-      <Image
-        source={require('../assets/images/search.png')}
-        style={styles.icon}
-        accessible={true}
-        accessibilityLabel="Search"
-      />
+      <MaterialIcons name="search" size={16} color={Colors.light.primary} />
       <TextInput
         style={styles.input}
         onChangeText={onChange}
@@ -38,10 +35,7 @@ const SearchBar = ({ search, onChange }: Props) => {
           accessible={true}
           accessibilityLabel="Clear search"
         >
-          <Image
-            source={require('../assets/images/close.png')}
-            style={styles.icon}
-          />
+          <MaterialIcons name="close" size={16} color={Colors.light.primary} />
         </Pressable>
       )}
     </View>
@@ -68,10 +62,6 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     paddingVertical: 0,
     paddingHorizontal: 8,
-  },
-  icon: {
-    width: 16,
-    height: 16,
   },
   clearButton: {
     padding: 4,

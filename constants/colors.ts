@@ -1,6 +1,7 @@
 const tintColor = '#CC0000'
 
 export const typeColors = {
+  all: '#121212',
   normal: '#A8A77A',
   fire: '#EE8130',
   water: '#6390F0',

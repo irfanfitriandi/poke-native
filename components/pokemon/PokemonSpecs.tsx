@@ -1,31 +1,31 @@
-import React from 'react'
-import {
-  Image,
-  type ImageSourcePropType,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useThemeColor } from '@/hooks/useThemeColor'
 import MonoText from '../shared/MonoText'
 
 interface Props {
-  spec?: string
+  spec: string
   name: string
-  image?: ImageSourcePropType
+  icon: keyof typeof MaterialIcons.glyphMap
+  color: string
 }
 
-const PokemonSpecs = ({ spec, name, image }: Props) => {
-  const colors = useThemeColor()
-
+const PokemonSpecs = ({ spec, name, icon, color }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        {image && <Image source={image} style={styles.icon} />}
-        {spec && <MonoText style={styles.specText}>{spec}</MonoText>}
+        <MaterialIcons
+          name={icon}
+          size={24}
+          color={color}
+          style={{
+            transform: name === 'Height' ? [{ rotate: '90deg' }] : '',
+          }}
+        />
+
+        <MonoText style={styles.specText}>{spec}</MonoText>
       </View>
-      <Text style={[styles.nameText, { color: colors.mutedText }]}>{name}</Text>
+      <Text style={[styles.nameText, { color: color }]}>{name}</Text>
     </View>
   )
 }

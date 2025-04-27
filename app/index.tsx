@@ -1,21 +1,21 @@
 import { useQuery } from '@apollo/client'
-import { MaterialIcons } from '@expo/vector-icons'
 import { useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native'
 
+import { Dropdown, dropdownOption } from '@/components/Dropdown'
 import RootView from '@/components/layout/RootView'
 import PokemonCard from '@/components/pokemon/PokemonCard'
 import PokeSpinner from '@/components/pokemon/PokemonSpinner'
 import SearchBar from '@/components/SearchBar'
 import Card from '@/components/shared/Card'
 import MonoText from '@/components/shared/MonoText'
+import { sortOptions, typeOptions } from '@/constants/options'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { debounce } from '@/libs/helpers'
 import { GET_POKEMON_LIST } from '@/libs/queries'
@@ -29,13 +29,15 @@ const EmptyListMessage = () => {
   )
 }
 
-type SortOption = 'id' | 'name' | 'none'
-
 export default function App() {
   const colors = useThemeColor()
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [sortBy, setSortBy] = useState<SortOption>('none')
+  const [selectedType, setSelectedType] = useState('all')
+  const [sortBy, setSortBy] = useState<dropdownOption>({
+    label: 'Pokémon ID',
+    value: 'id',
+  })
 
   const debouncedSetSearch = useMemo(
     () => debounce((text: string) => setDebouncedSearch(text), 500),
@@ -50,11 +52,17 @@ export default function App() {
       limit: 21,
       search: debouncedSearch ? `%${debouncedSearch}%` : '%%',
       orderBy:
-        sortBy === 'name'
+        sortBy.value === 'name'
           ? { name: 'asc' }
-          : sortBy === 'id'
+          : sortBy.value === 'id'
           ? { id: 'asc' }
           : undefined,
+      where: {
+        pokemon_v2_pokemontypes:
+          selectedType === 'all'
+            ? undefined
+            : { pokemon_v2_type: { name: { _eq: selectedType } } },
+      },
     },
     notifyOnNetworkStatusChange: true,
   })
@@ -105,14 +113,20 @@ export default function App() {
         />
         <View style={styles.searchContainer}>
           <SearchBar search={search} onChange={handleSearch} />
-          <TouchableOpacity
-            style={styles.sortButton}
-            onPress={() =>
-              setSortBy((prev) => (prev === 'name' ? 'id' : 'name'))
+          <Dropdown
+            type="sort"
+            options={sortOptions}
+            selectedValue={sortBy.value}
+            onValueChange={(value) =>
+              setSortBy(sortOptions.find((opt) => opt.value === value)!)
             }
-          >
-            <MaterialIcons name="sort" size={24} color={colors.textContrast} />
-          </TouchableOpacity>
+          />
+          <Dropdown
+            type="filter"
+            options={typeOptions}
+            selectedValue={selectedType}
+            onValueChange={(value) => setSelectedType(value)}
+          />
         </View>
       </View>
 
@@ -141,6 +155,9 @@ export default function App() {
             ListEmptyComponent={
               !loading && debouncedSearch ? <EmptyListMessage /> : null
             }
+            initialNumToRender={15}
+            maxToRenderPerBatch={15}
+            windowSize={21}
           />
         )}
       </Card>
@@ -160,6 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    paddingHorizontal: 10,
   },
   sortButton: {
     padding: 8,

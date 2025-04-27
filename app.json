@@ -4,7 +4,7 @@
     "slug": "poke-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/pokeball.png",
+    "icon": "./assets/images/pokeball-color.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,21 +13,21 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/pokeball.png",
+        "foregroundImage": "./assets/images/pokeball-color.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/pokeball.png"
+      "favicon": "./assets/images/pokeball-color.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/pokeball-big.png",
+          "image": "./assets/images/pokeball-color.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
