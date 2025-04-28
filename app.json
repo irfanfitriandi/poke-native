@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "poke-native",
+    "name": "Pokédex",
     "slug": "poke-native",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/pokeball-color.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.irfanfitriandi.pokenative"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d5a5c703-dd21-4a46-8846-cd8ab128f8d3"
+      }
     }
   }
 }

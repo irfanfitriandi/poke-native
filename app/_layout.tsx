@@ -46,7 +46,6 @@ export default function RootLayout() {
       <ApolloProvider client={client}>
         <Stack
           screenOptions={{
-            contentStyle: { backgroundColor: 'transparent' },
             headerShown: false,
             animation: 'fade',
           }}

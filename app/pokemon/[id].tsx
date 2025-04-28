@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
 import { router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence } from 'moti'
-import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { memo, PropsWithChildren, useMemo, useState } from 'react'
 import {
   Image,
   Pressable,
@@ -40,32 +40,30 @@ interface PokemonRoute extends Route {
   onPrevious: () => void
 }
 
-const lastPokemon = 151
+const lastPokemon = 10277
 const firstPokemon = 1
 
 const PokemonDetailScreen = () => {
-  const { id: idParam } = useLocalSearchParams<{ id: string }>()
+  const [id, setId] = useState(
+    parseInt((useLocalSearchParams() as { id: string }).id, 10)
+  )
+
+  const routeFor = (id: number) => {
+    return {
+      key: id.toString(),
+      id: id,
+      title: id.toString(),
+      onNext: () => setIndex((i) => i + 1),
+      onPrevious: () => setIndex((i) => i - 1),
+    } satisfies PokemonRoute
+  }
   const layout = useWindowDimensions()
-  const [id, setId] = useState(() => parseInt(idParam, 10))
   const [index, setIndex] = useState(1)
-
-  const createRoute = useCallback(
-    (newId: number): PokemonRoute => ({
-      key: newId.toString(),
-      id: newId,
-      title: newId.toString(),
-      onNext: () => setIndex((prev) => prev + 1),
-      onPrevious: () => setIndex((prev) => prev - 1),
-    }),
-    []
-  )
-
   const routes = useMemo(
-    () => [createRoute(id - 1), createRoute(id), createRoute(id + 1)],
-    [id, createRoute]
+    () => [routeFor(id - 1), routeFor(id), routeFor(id + 1)],
+    [id]
   )
-
-  const handleAnimationEnd = useCallback(() => {
+  const handleAnimationEnd = () => {
     if (
       index === 1 ||
       (index === 0 && id === firstPokemon + 1) ||
@@ -73,18 +71,14 @@ const PokemonDetailScreen = () => {
     ) {
       return
     }
-    setId((prevId) => prevId + (index - 1))
-  }, [id, index])
-
-  const renderScene = useCallback(
-    ({ route }: { route: PokemonRoute }) => (
-      <PokemonView
-        id={route.id}
-        onPrevious={route.onPrevious}
-        onNext={route.onNext}
-      />
-    ),
-    []
+    setId(id + (index - 1))
+  }
+  const renderScene = ({ route }: { route: PokemonRoute }) => (
+    <PokemonView
+      id={route.id}
+      onPrevious={route.onPrevious}
+      onNext={route.onNext}
+    />
   )
 
   return (
@@ -117,45 +111,37 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
   )
 
   const pokemon = data?.pokemon_v2_pokemon_by_pk
-
   const mainType = pokemon?.pokemon_v2_pokemontypes[0]?.pokemon_v2_type.name
   const colorType = mainType
     ? (colors.type as Record<string, string>)[mainType]
     : colors.tint
 
-  const specs = useMemo(
-    () => [
-      {
-        name: 'Weight',
-        icon: 'scale' as keyof typeof MaterialIcons.glyphMap,
-        spec: formatWeight(pokemon?.weight),
-      },
-      {
-        name: 'Height',
-        icon: 'straighten' as keyof typeof MaterialIcons.glyphMap,
-        spec: formatHeight(pokemon?.height),
-      },
-      {
-        name: 'Ability',
-        icon: 'emoji-objects' as keyof typeof MaterialIcons.glyphMap,
-        spec:
-          pokemon?.pokemon_v2_pokemonabilities[0]?.pokemon_v2_ability.name ??
-          'Unknown',
-      },
-    ],
-    [pokemon]
+  const specs = [
+    {
+      name: 'Weight',
+      icon: 'scale' as keyof typeof MaterialIcons.glyphMap,
+      spec: formatWeight(pokemon?.weight),
+    },
+    {
+      name: 'Height',
+      icon: 'straighten' as keyof typeof MaterialIcons.glyphMap,
+      spec: formatHeight(pokemon?.height),
+    },
+    {
+      name: 'Ability',
+      icon: 'emoji-objects' as keyof typeof MaterialIcons.glyphMap,
+      spec:
+        pokemon?.pokemon_v2_pokemonabilities[0]?.pokemon_v2_ability.name ??
+        'Unknown',
+    },
+  ]
+
+  const specy = formatFlavorText(
+    pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonspeciesflavortexts[0]
+      ?.flavor_text
   )
 
-  const specy = useMemo(
-    () =>
-      formatFlavorText(
-        pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonspeciesflavortexts[0]
-          ?.flavor_text
-      ),
-    [pokemon]
-  )
-
-  const onCry = useCallback(async () => {
+  const onCry = async () => {
     const cryUri = pokemon?.pokemon_v2_pokemoncries[0]?.cries.latest
     if (!cryUri) return
 
@@ -164,7 +150,7 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
       { shouldPlay: true }
     )
     await sound.playAsync()
-  }, [pokemon])
+  }
 
   if (!pokemon) {
     return (
