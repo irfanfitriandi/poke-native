@@ -8,9 +8,17 @@ interface Props {
   name: string
   value: number
   color: string
+  comparisonValue?: number
+  comparisonColor?: string
 }
 
-const PokemonStats = ({ name, value, color }: Props) => {
+const PokemonStats = ({
+  name,
+  value,
+  color,
+  comparisonValue,
+  comparisonColor,
+}: Props) => {
   const colors = useThemeColor()
 
   return (
@@ -20,9 +28,16 @@ const PokemonStats = ({ name, value, color }: Props) => {
       </View>
 
       <View style={styles.statsWrapper}>
-        <MonoText variant="caption" style={{ color: colors.text }}>
-          {value.toString().padStart(3, '0')}
-        </MonoText>
+        <View style={styles.valuesContainer}>
+          <MonoText variant="caption" style={{ color: colors.text }}>
+            {value.toString().padStart(3, '0')}
+          </MonoText>
+          {comparisonValue && comparisonColor && (
+            <MonoText variant="caption" style={{ color: comparisonColor }}>
+              {comparisonValue.toString().padStart(3, '0')}
+            </MonoText>
+          )}
+        </View>
 
         <View style={styles.barWrapper}>
           <View
@@ -31,6 +46,17 @@ const PokemonStats = ({ name, value, color }: Props) => {
               { backgroundColor: color, opacity: 0.24 },
             ]}
           />
+          {comparisonValue && comparisonColor && (
+            <MotiView
+              style={[
+                styles.comparisonBarFill,
+                { backgroundColor: comparisonColor, opacity: 0.5 },
+              ]}
+              animate={{
+                width: `${(comparisonValue / 255) * 100}%`,
+              }}
+            />
+          )}
           <MotiView
             style={[styles.barFill, { backgroundColor: color }]}
             animate={{
@@ -72,6 +98,10 @@ const styles = StyleSheet.create({
     gap: 8,
     flex: 1,
   },
+  valuesContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   barWrapper: {
     flex: 1,
     height: 4,
@@ -84,6 +114,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   barFill: {
+    position: 'absolute',
+    height: '100%',
+    borderRadius: 20,
+    left: 0,
+    top: 0,
+  },
+  comparisonBarFill: {
     position: 'absolute',
     height: '100%',
     borderRadius: 20,

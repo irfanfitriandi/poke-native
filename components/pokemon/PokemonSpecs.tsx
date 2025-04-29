@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { usePathname } from 'expo-router'
 import { StyleSheet, Text, View } from 'react-native'
 
 import MonoText from '../shared/MonoText'
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const PokemonSpecs = ({ spec, name, icon, color }: Props) => {
+  const pathname = usePathname().split('/')[2]
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -25,7 +28,9 @@ const PokemonSpecs = ({ spec, name, icon, color }: Props) => {
 
         <MonoText style={styles.specText}>{spec}</MonoText>
       </View>
-      <Text style={[styles.nameText, { color: color }]}>{name}</Text>
+      <Text style={[styles.nameText, { color: color }]}>
+        {pathname === 'compare' ? '' : name}
+      </Text>
     </View>
   )
 }

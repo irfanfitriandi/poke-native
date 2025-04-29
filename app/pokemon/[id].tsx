@@ -40,13 +40,13 @@ interface PokemonRoute extends Route {
   onPrevious: () => void
 }
 
-const lastPokemon = 10277
 const firstPokemon = 1
+const lastPokemon = 10277
 
 const PokemonDetailScreen = () => {
-  const [id, setId] = useState(
-    parseInt((useLocalSearchParams() as { id: string }).id, 10)
-  )
+  const { id: pokemonId } = useLocalSearchParams()
+  const layout = useWindowDimensions()
+  const [id, setId] = useState(Number(pokemonId))
 
   const routeFor = (id: number) => {
     return {
@@ -57,7 +57,6 @@ const PokemonDetailScreen = () => {
       onPrevious: () => setIndex((i) => i - 1),
     } satisfies PokemonRoute
   }
-  const layout = useWindowDimensions()
   const [index, setIndex] = useState(1)
   const routes = useMemo(
     () => [routeFor(id - 1), routeFor(id), routeFor(id + 1)],
@@ -150,6 +149,13 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
       { shouldPlay: true }
     )
     await sound.playAsync()
+  }
+
+  const handleCompare = () => {
+    router.push({
+      pathname: '/pokemon/compare/[id]',
+      params: { id },
+    })
   }
 
   if (!pokemon) {
@@ -279,6 +285,14 @@ const PokemonView = memo(({ id, onPrevious, onNext }: Props) => {
             </View>
           </View>
         </Card>
+
+        {/* Compare Button */}
+        <Pressable style={styles.compareButton} onPress={handleCompare}>
+          <MonoText style={{ color: colorType, fontSize: 20 }} weight="bold">
+            Compare
+          </MonoText>
+          <MaterialIcons name="play-arrow" size={24} color={colorType} />
+        </Pressable>
       </View>
     </RootView>
   )
@@ -350,6 +364,18 @@ const styles = StyleSheet.create({
     right: -40,
     fontSize: 24,
     transform: [{ rotate: '-15deg' }],
+  },
+  compareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 120,
+    paddingHorizontal: 8,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginTop: 24,
+    alignSelf: 'flex-end',
   },
 })
 

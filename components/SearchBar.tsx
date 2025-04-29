@@ -1,32 +1,41 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useCallback } from 'react'
-import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View, ViewProps } from 'react-native'
 
 import { Colors } from '@/constants/colors'
 
-interface Props {
-  search: string
-  onChange: (s: string) => void
+interface Props extends ViewProps {
+  value: string
+  onChange: (text: string) => void
+  placeholder?: string
+  accessibilityLabel?: string
 }
 
-const SearchBar = ({ search, onChange }: Props) => {
-  const hasSearch = search !== ''
+const SearchBar = ({
+  style,
+  value,
+  onChange,
+  placeholder = 'Search Pokémon...',
+  accessibilityLabel = 'Search Pokémon',
+}: Props) => {
+  const hasSearch = value !== ''
 
   const emptySearch = useCallback(() => {
     onChange('')
   }, [onChange])
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, style]}>
       <MaterialIcons name="search" size={16} color={Colors.light.primary} />
       <TextInput
         style={styles.input}
         onChangeText={onChange}
-        value={search}
-        placeholder="Search"
+        value={value}
+        placeholder={placeholder}
         placeholderTextColor={Colors.light.mutedText}
         accessible={true}
-        accessibilityLabel="Search input"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="search"
       />
       {hasSearch && (
         <Pressable
@@ -52,7 +61,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 2,
     width: '100%',
-    flex: 1,
   },
   input: {
     flex: 1,

@@ -1,60 +1,70 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native'
-import { useFonts } from 'expo-font'
+import { ApolloProvider } from '@apollo/client'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
-import { ActivityIndicator, useColorScheme, View } from 'react-native'
-import 'react-native-reanimated'
+import { useEffect, useState } from 'react'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync()
+import { useLoadFonts } from '@/hooks/useLoadFont'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { apolloClient } from '@/libs/apolloClient'
 
-const client = new ApolloClient({
-  uri: 'https://beta.pokeapi.co/graphql/v1beta',
-  cache: new InMemoryCache(),
-})
+// Handle splash immediately
+SplashScreen.preventAutoHideAsync().catch(console.warn)
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
-
-  const [loaded] = useFonts({
-    'SpaceMono-Regular': require('../assets/fonts/SpaceMono-Regular.ttf'),
-    'SpaceMono-Bold': require('../assets/fonts/SpaceMono-Bold.ttf'),
-  })
+  const color = useThemeColor()
+  const [fontsLoaded] = useLoadFonts()
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync()
+    const prepare = async () => {
+      try {
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync()
+          setIsReady(true)
+        }
+      } catch (error) {
+        console.warn('Splash screen preparation error:', error)
+        await SplashScreen.hideAsync()
+        setIsReady(true)
+      }
     }
-  }, [loaded])
 
-  if (!loaded) {
+    prepare()
+  }, [fontsLoaded])
+
+  if (!isReady) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
+      <View
+        style={[styles.splashContainer, { backgroundColor: 'transparent' }]}
+      >
+        <ActivityIndicator size="large" color={color.tint} />
       </View>
     )
   }
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ApolloProvider client={client}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: 'fade',
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="pokemon/[id]" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ApolloProvider>
-    </ThemeProvider>
+    <ApolloProvider client={apolloClient}>
+      <StatusBar style="auto" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="pokemon/[id]" />
+        <Stack.Screen name="pokemon/compare/[id]" />
+      </Stack>
+    </ApolloProvider>
   )
 }
+
+const styles = StyleSheet.create({
+  splashContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})

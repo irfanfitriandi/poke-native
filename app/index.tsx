@@ -1,14 +1,17 @@
 import { useQuery } from '@apollo/client'
+import { router } from 'expo-router'
 import { useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
   Image,
+  Pressable,
   StyleSheet,
   View,
 } from 'react-native'
 
 import { Dropdown, dropdownOption } from '@/components/Dropdown'
+import EmptyListMessage from '@/components/EmptyListMessage'
 import RootView from '@/components/layout/RootView'
 import PokemonCard from '@/components/pokemon/PokemonCard'
 import PokeSpinner from '@/components/pokemon/PokemonSpinner'
@@ -20,14 +23,6 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { debounce } from '@/libs/helpers'
 import { GET_POKEMON_LIST } from '@/libs/queries'
 import { Pokemon } from '@/libs/types'
-
-const EmptyListMessage = () => {
-  return (
-    <View style={{ alignItems: 'center', marginTop: 20 }}>
-      <MonoText>No Pokémon found.</MonoText>
-    </View>
-  )
-}
 
 export default function App() {
   const colors = useThemeColor()
@@ -72,6 +67,13 @@ export default function App() {
     debouncedSetSearch(text)
   }
 
+  const handleCompare = () => {
+    router.push({
+      pathname: '/pokemon/compare/[id]',
+      params: { id: 1 },
+    })
+  }
+
   const debouncedOnEnd = useMemo(
     () =>
       debounce(() => {
@@ -112,7 +114,24 @@ export default function App() {
           resizeMode="contain"
         />
         <View style={styles.searchContainer}>
-          <SearchBar search={search} onChange={handleSearch} />
+          <SearchBar
+            value={search}
+            onChange={handleSearch}
+            style={{ flex: 1 }}
+          />
+          <Pressable
+            style={[
+              styles.compareButton,
+              {
+                backgroundColor: colors.accent,
+              },
+            ]}
+            onPress={handleCompare}
+          >
+            <MonoText style={{ color: colors.secondary }} weight="bold">
+              Compare
+            </MonoText>
+          </Pressable>
           <Dropdown
             type="sort"
             options={sortOptions}
@@ -196,5 +215,13 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 12,
+  },
+  compareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    height: 32,
+    borderRadius: 8,
   },
 })
