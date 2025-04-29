@@ -2,18 +2,22 @@
 
 A modern Pokémon encyclopedia built with React Native and Expo, featuring smooth animations and a clean interface.
 
-## Pokémon App Screenshots
+## PokeNative App Screenshots
 
 Check out some cool screenshots of the app!
 
 <div >
-  <img src="https://github.com/user-attachments/assets/d19f06de-4b39-47aa-8a2b-bcee6481230d" width="auto" height="350" />
-  <img src="https://github.com/user-attachments/assets/87ba583a-99c7-4563-951a-3da209373d78" width="auto" height="350" />
-  <img src="https://github.com/user-attachments/assets/172b1a04-b904-4e4f-bbd1-e46dac1f1cd8" width="auto" height="350" />
-  <img src="https://github.com/user-attachments/assets/0a8d60a3-23d6-432c-97a7-dee1296e6bea" width="auto" height="350" />
-  <img src="https://github.com/user-attachments/assets/63d91cc0-81ca-4270-b48b-7c3fbb63861a" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/d19f06de-4b39-47aa-8a2b-bcee6481230d" width="auto" height="450" />
+  <img src="https://github.com/user-attachments/assets/87ba583a-99c7-4563-951a-3da209373d78" width="auto" height="450" />
+  <img src="https://github.com/user-attachments/assets/172b1a04-b904-4e4f-bbd1-e46dac1f1cd8" width="auto" height="450" />
+  <img src="https://github.com/user-attachments/assets/0a8d60a3-23d6-432c-97a7-dee1296e6bea" width="auto" height="450" />
+  <img src="https://github.com/user-attachments/assets/63d91cc0-81ca-4270-b48b-7c3fbb63861a" width="auto" height="450" />
 </div>
 
+## 📦 Download
+
+Grab the latest release of the app here:
+➡️ [Download PokeNative APK](https://drive.google.com/file/d/104P_vieh8bTbZdIRCNrzZhAnkf1h4q9B)
 
 ## Features
 
