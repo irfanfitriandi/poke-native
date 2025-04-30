@@ -7,17 +7,20 @@ A modern Pokémon encyclopedia built with React Native and Expo, featuring smoot
 Check out some cool screenshots of the app!
 
 <div >
-  <img src="https://github.com/user-attachments/assets/d19f06de-4b39-47aa-8a2b-bcee6481230d" width="auto" height="450" />
-  <img src="https://github.com/user-attachments/assets/87ba583a-99c7-4563-951a-3da209373d78" width="auto" height="450" />
-  <img src="https://github.com/user-attachments/assets/172b1a04-b904-4e4f-bbd1-e46dac1f1cd8" width="auto" height="450" />
-  <img src="https://github.com/user-attachments/assets/0a8d60a3-23d6-432c-97a7-dee1296e6bea" width="auto" height="450" />
-  <img src="https://github.com/user-attachments/assets/63d91cc0-81ca-4270-b48b-7c3fbb63861a" width="auto" height="450" />
+  <img src="https://github.com/user-attachments/assets/47cc57ec-e4e3-4764-98de-337ada98b585" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/7c9e9e32-a1d7-4426-a3f0-eab34a8a63a5" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/bfbe5da4-c4a9-4d18-a280-4c012b8103cb" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/a96e1dc2-abd9-4257-a758-979b9f173b2a" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/7d2e9549-e430-4aaf-a35f-7f9620ecb4f9" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/cf28f82d-9c91-4d64-8cee-f8e4bfd79137" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/ad9fff12-a826-4ef3-bf7a-24420aecd885" width="auto" height="350" />
+  <img src="https://github.com/user-attachments/assets/cd3d9e64-1469-4453-8a11-2655ec258fe9" width="auto" height="350" />
 </div>
 
 ## 📦 Download
 
 Grab the latest release of the app here:
-➡️ [Download PokeNative APK](https://drive.google.com/file/d/104P_vieh8bTbZdIRCNrzZhAnkf1h4q9B)
+➡️ [Download PokeNative APK](https://drive.google.com/file/d/1AYfGcV5lFJ57DnXNDNLUgljQwPwionTc/view)
 
 ## Features
 
@@ -33,6 +36,13 @@ Grab the latest release of the app here:
 - **Stat Chart** - See the numbers that make your Pokémon legendary with a sweet stat visualization
 - **Tap Pokémon** - Give it a tap to hear your Pokémon’s voice—yes, really!
 - **Physical Specs** - Get all the deets—height, weight, and ability for each Pokémon
+
+### ⚔️ Compare Screen
+- **Side-by-Side Comparison** - Compare two Pokémon side by side in a single view  
+- **Search Pokémon on Each Side** - Independently search and select Pokémon for the left and right panels  
+- **Previous/Next Pokémon Navigation** - Easily switch to the previous or next Pokémon (by ID) on either side  
+- **Stat Comparison Chart** - View overlapping radar chart or bar graph to directly compare stats  
+- **Type & Abilities Overview** - Quickly contrast their types and abilities to strategize better  
 
 ## Technologies Used
 
